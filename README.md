@@ -1,7 +1,7 @@
 # Moo - A Twitter Clone
 Backend API for Moo using Nest framework (NodeJS + TypeScript + PostgreSQL)
 
-![NodeJS Workflow](https://github.com/github/docs/actions/workflows/nodejs.yml/badge.svg)
+![NodeJS Workflow](https://github.com/scaleracademy/twitter-backend-node/actions/workflows/nodejs.yml/badge.svg)
 
 
 ## Installation
