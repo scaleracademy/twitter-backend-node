@@ -7,6 +7,8 @@ import { HashtagsController } from './hashtags/hashtags.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './users/users.entity';
 import { PostEntity } from './posts/posts.entity';
+import { UsersService } from './users/users.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -20,13 +22,9 @@ import { PostEntity } from './posts/posts.entity';
       logging: 'all',
       entities: [UserEntity, PostEntity],
     }),
+    UsersModule,
   ],
-  controllers: [
-    AppController,
-    UsersController,
-    PostsController,
-    HashtagsController,
-  ],
+  controllers: [AppController, PostsController, HashtagsController],
   providers: [AppService],
 })
 export class AppModule {}
