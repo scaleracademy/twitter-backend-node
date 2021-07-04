@@ -12,6 +12,13 @@ export class UserCreateRequestBody {
   @ApiPropertyOptional() bio?: string;
 }
 
+export class UserUpdateRequestBody {
+  @ApiPropertyOptional() password?: string;
+  @ApiPropertyOptional() name?: string;
+  @ApiPropertyOptional() avatar?: string;
+  @ApiPropertyOptional() bio?: string;
+}
+
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
@@ -45,9 +52,14 @@ export class UsersController {
     return user;
   }
 
+  // TODO: make sure that the user is authenticated as themselves
   @Patch('/:userid')
-  updateUserDetails(@Param('userid') userid: string): string {
-    return `details of user (id = ${userid}) updated`;
+  async updateUserDetails(
+    @Param('userid') userid: string,
+    @Body() updateUserRequest: UserUpdateRequestBody,
+  ): Promise<UserEntity> {
+    const user = await this.userService.updateUser(userid, updateUserRequest);
+    return user;
   }
 
   @Put('/:userid/follow')
