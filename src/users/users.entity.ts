@@ -1,5 +1,6 @@
+import { PasswordEntity } from 'src/auth/passwords.entity';
 import { MooBaseEntity } from 'src/commons/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
 
 @Entity('users')
 export class UserEntity extends MooBaseEntity {
@@ -23,4 +24,10 @@ export class UserEntity extends MooBaseEntity {
 
   @Column('boolean', { default: false })
   verified: boolean;
+
+  @OneToOne((type) => PasswordEntity, (password) => password.user, {
+    lazy: true,
+    cascade: true,
+  })
+  userPassword: PasswordEntity;
 }
