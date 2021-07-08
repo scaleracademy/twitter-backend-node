@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
-import { PasswordEntity } from 'src/auth/passwords.entity';
-import { Repository } from 'typeorm';
 import { UserEntity } from './users.entity';
 import { UsersRepository } from './users.repository';
 
