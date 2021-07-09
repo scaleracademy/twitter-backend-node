@@ -1,14 +1,23 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare, hash } from 'bcrypt';
+import { UsersRepository } from 'src/users/users.repository';
 import { Repository } from 'typeorm';
 import { PasswordEntity } from './passwords.entity';
+import { SessionsEntity } from './sessions.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private userRepo: UsersRepository,
     @InjectRepository(PasswordEntity)
     private passwordRepo: Repository<PasswordEntity>,
+    @InjectRepository(SessionsEntity)
+    private sessionRepo: Repository<SessionsEntity>,
   ) {}
 
   public static PASSWORD_SALT_ROUNDS = 10;
@@ -28,6 +37,25 @@ export class AuthService {
     newPassword.userId = userId;
     newPassword.password = await this.passToHash(password);
     return await this.passwordRepo.save(newPassword);
+  }
+
+  async createNewSession(username: string, password: string) {
+    const user = await this.userRepo.findOne({ where: { username } });
+
+    if (!user) {
+      throw new NotFoundException('Username does not exist');
+    }
+    const userPassword = await this.passwordRepo.findOne({
+      where: { userId: user.id },
+    });
+    const passMatch = await this.matchPassHash(password, userPassword.password);
+    if (!passMatch) {
+      throw new UnauthorizedException('Password is wrong');
+    }
+    const session = new SessionsEntity();
+    session.userId = userPassword.userId;
+    const savedSession = await this.sessionRepo.save(session);
+    return savedSession;
   }
 
   private async passToHash(password: string): Promise<string> {

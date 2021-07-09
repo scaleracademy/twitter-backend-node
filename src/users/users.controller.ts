@@ -1,6 +1,11 @@
 import { Body, Delete, NotFoundException } from '@nestjs/common';
 import { Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
-import { ApiProperty, ApiPropertyOptional, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserEntity } from './users.entity';
 import { UsersService } from './users.service';
 
