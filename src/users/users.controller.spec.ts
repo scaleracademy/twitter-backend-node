@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
-import { PasswordEntity } from 'src/auth/passwords.entity';
-import { SessionsEntity } from 'src/auth/sessions.entity';
-import { MockUsersRepositoryProvider } from 'src/commons/mocks/mock.providers';
-import { MockPasswordsRepository } from 'src/commons/mocks/passwords.repository.mock';
+import {
+  MockPasswordRepositoryProvider,
+  MockSessionRepositoryProvider,
+  MockUsersRepositoryProvider,
+} from 'src/commons/mocks/mock.providers';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -17,14 +17,8 @@ describe('UsersController', () => {
         UsersService,
         AuthService,
         MockUsersRepositoryProvider,
-        {
-          provide: getRepositoryToken(PasswordEntity),
-          useClass: MockPasswordsRepository,
-        },
-        {
-          provide: getRepositoryToken(SessionsEntity),
-          useValue: {},
-        },
+        MockPasswordRepositoryProvider,
+        MockSessionRepositoryProvider,
       ],
       controllers: [UsersController],
     }).compile();
