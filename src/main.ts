@@ -16,6 +16,11 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Moo API')
     .setDescription('API for shitposting social network')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'Token',
+    })
     .setVersion('1.0')
     .addTag('posts')
     .build();

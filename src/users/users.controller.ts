@@ -1,11 +1,21 @@
-import { Body, Delete, NotFoundException } from '@nestjs/common';
+import {
+  Body,
+  Delete,
+  ForbiddenException,
+  NotFoundException,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiOperation,
   ApiProperty,
   ApiPropertyOptional,
   ApiTags,
 } from '@nestjs/swagger';
+import { User } from 'src/auth/auth.decorator';
+import { RequiredAuthGuard } from 'src/auth/auth.guard';
 import { UserEntity } from './users.entity';
 import { UsersService } from './users.service';
 
@@ -60,12 +70,17 @@ export class UsersController {
     return user;
   }
 
-  // TODO: make sure that the user is authenticated as themselves
+  @ApiBearerAuth()
+  @UseGuards(RequiredAuthGuard)
   @Patch('/:userid')
   async updateUserDetails(
+    @User() authdUser: UserEntity,
     @Param('userid') userid: string,
     @Body() updateUserRequest: UserUpdateRequestBody,
   ): Promise<UserEntity> {
+    if (authdUser.id !== userid) {
+      throw new ForbiddenException('You can only update your own user details');
+    }
     const user = await this.userService.updateUser(userid, updateUserRequest);
     return user;
   }

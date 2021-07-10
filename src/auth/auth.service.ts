@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare, hash } from 'bcrypt';
+import { UserEntity } from 'src/users/users.entity';
 import { UsersRepository } from 'src/users/users.repository';
 import { Repository } from 'typeorm';
 import { PasswordEntity } from './passwords.entity';
@@ -56,6 +57,18 @@ export class AuthService {
     session.userId = userPassword.userId;
     const savedSession = await this.sessionRepo.save(session);
     return savedSession;
+  }
+
+  async getUserFromSessionToken(token: string): Promise<UserEntity> {
+    const session = await this.sessionRepo.findOne({ where: { id: token } });
+    if (!session) {
+      throw new UnauthorizedException('Session not found');
+    }
+    const user = await session.user;
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return user;
   }
 
   private async passToHash(password: string): Promise<string> {

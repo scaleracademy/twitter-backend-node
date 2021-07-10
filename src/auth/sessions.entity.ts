@@ -8,6 +8,6 @@ export class SessionsEntity extends MooBaseEntity {
   userId: string;
 
   @JoinColumn({ name: 'userId' })
-  @OneToOne(() => UserEntity)
-  user: UserEntity;
+  @OneToOne(() => UserEntity, { lazy: true })
+  user: Promise<UserEntity>;
 }
