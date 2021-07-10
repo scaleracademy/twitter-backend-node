@@ -17,7 +17,7 @@ import { RequiredAuthGuard } from 'src/auth/auth.guard';
 import { UserEntity } from './users.entity';
 import { UsersService } from './users.service';
 
-export class UserCreateRequestBody {
+class UserCreateRequestBody {
   @ApiProperty() username: string;
   @ApiProperty() password: string;
   @ApiPropertyOptional() name?: string;
@@ -25,7 +25,7 @@ export class UserCreateRequestBody {
   @ApiPropertyOptional() bio?: string;
 }
 
-export class UserUpdateRequestBody {
+class UserUpdateRequestBody {
   @ApiPropertyOptional() password?: string;
   @ApiPropertyOptional() name?: string;
   @ApiPropertyOptional() avatar?: string;

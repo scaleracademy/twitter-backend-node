@@ -1,10 +1,29 @@
-import { Delete, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Delete,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { User } from 'src/auth/auth.decorator';
+import { RequiredAuthGuard } from 'src/auth/auth.guard';
+import { UserEntity } from 'src/users/users.entity';
+import { PostEntity } from './posts.entity';
+import { PostsService } from './posts.service';
+
+class PostCreateRequestBody {
+  @ApiProperty() text: string;
+}
 
 @ApiTags('posts')
 @Controller('posts')
 export class PostsController {
+  constructor(private readonly postsService: PostsService) {}
+
   @Get('/')
   getAllPosts(): string {
     // TODO
@@ -17,10 +36,16 @@ export class PostsController {
     return `details of postid = ${postid}`;
   }
 
+  @ApiBearerAuth()
+  @UseGuards(RequiredAuthGuard)
   @Post('/')
-  createNewPost(): string {
+  async createNewPost(
+    @User() author: UserEntity,
+    @Body() post: PostCreateRequestBody,
+  ): Promise<PostEntity> {
     // TODO
-    return `new post was created`;
+    const createdPost = await this.postsService.createPost(post, author);
+    return createdPost;
   }
 
   @Delete('/:postid')
