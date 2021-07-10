@@ -34,6 +34,8 @@ export class UsersService {
     password: string,
   ): Promise<UserEntity> {
     const newUser = await this.userRepo.save(user);
+    // TODO: check username min length 5 chars
+    // TODO: check password min length 8 chars
 
     await this.authService.createPasswordForNewUser(newUser.id, password);
 
