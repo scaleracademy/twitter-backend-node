@@ -11,6 +11,9 @@ export class PostsService {
    * @description find all posts
    */
   async getAllPosts(): Promise<Array<PostEntity>> {
+    // TODO: implementation pagination (size + limit)
+    // TODO: implement filter by author
+    // TODO: implement filter by hashtag
     return this.postsRepository.find({
       take: 100,
       order: { createdAt: 'DESC' },
@@ -42,6 +45,8 @@ export class PostsService {
   ): Promise<PostEntity> {
     // TODO: implement repost logic (orig_post_id)
     // TODO: implement reply_to logic (reply_to_id)
+    // TODO: detect #hashtags in the post and create hashtag entities for them
+    // TODO: deletect @user mentions in the post
     const newPost = new PostEntity();
     newPost.text = post.text;
     newPost.author = author;
