@@ -25,9 +25,8 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get('/')
-  getAllPosts(): string {
-    // TODO
-    return 'get all posts';
+  async getAllPosts(): Promise<PostEntity[]> {
+    return await this.postsService.getAllPosts();
   }
 
   @Get('/:postid')
@@ -43,7 +42,6 @@ export class PostsController {
     @User() author: UserEntity,
     @Body() post: PostCreateRequestBody,
   ): Promise<PostEntity> {
-    // TODO
     const createdPost = await this.postsService.createPost(post, author);
     return createdPost;
   }

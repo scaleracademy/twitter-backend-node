@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from 'src/users/users.entity';
-import { UsersRepository } from 'src/users/users.repository';
 import { PostEntity } from './posts.entity';
 import { PostsRepository } from './posts.repository';
 
 @Injectable()
 export class PostsService {
-  constructor(
-    private postsRepository: PostsRepository,
-    private userRepository: UsersRepository,
-  ) {}
+  constructor(private postsRepository: PostsRepository) {}
 
   /**
    * @description find all posts
    */
   async getAllPosts(): Promise<Array<PostEntity>> {
-    return this.postsRepository.find();
+    return this.postsRepository.find({
+      take: 100,
+      order: { createdAt: 'DESC' },
+      relations: ['author'],
+    });
   }
 
   /**
@@ -38,11 +38,10 @@ export class PostsService {
    */
   async createPost(
     post: Partial<PostEntity>,
-    user: UserEntity,
+    author: UserEntity,
   ): Promise<PostEntity> {
-    const author = await this.userRepository.findOne({
-      where: { id: user.id },
-    });
+    // TODO: implement repost logic (orig_post_id)
+    // TODO: implement reply_to logic (reply_to_id)
     const newPost = new PostEntity();
     newPost.text = post.text;
     newPost.author = author;
