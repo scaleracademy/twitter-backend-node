@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { UserEntity } from './users.entity';
 import { UsersRepository } from './users.repository';
@@ -44,8 +48,12 @@ export class UsersService {
         'Password  not be the word password itself',
       );
 
+    const usernameAlreadyExists = await this.getUserByUsername(user.username);
+    if (usernameAlreadyExists)
+      throw new ConflictException('This username is already taken!');
+
     const newUser = await this.userRepo.save(user);
-    // TODO: check for username/email existing and throw proper error
+    // TODO: check for username/email existing and throw proper error - ✅
     // TODO: check username min length 5 chars - ✅
     // TODO: check password min length 8 chars - ✅
 
