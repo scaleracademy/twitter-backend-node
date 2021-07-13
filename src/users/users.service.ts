@@ -43,9 +43,9 @@ export class UsersService {
     if (password.length < 8)
       throw new BadRequestException('Password must be of minimum 8 characters');
 
-    if (password.toLowerCase() === 'password')
+    if (password.toLowerCase().includes('password'))
       throw new BadRequestException(
-        'Password  not be the word password itself',
+        'Password cannot contain the word password itself',
       );
 
     const usernameAlreadyExists = await this.getUserByUsername(user.username);
