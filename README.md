@@ -3,6 +3,11 @@ Backend API for Moo using Nest framework (NodeJS + TypeScript + PostgreSQL)
 
 ![NodeJS Workflow](https://github.com/scaleracademy/twitter-backend-node/actions/workflows/nodejs.yml/badge.svg)
 
+## Prerequisites
+```
+1. Node
+2. Docker
+```
 
 ## Installation
 
@@ -21,6 +26,9 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
+# docker mode
+$ docker-compose up &
 ```
 
 ## Test
