@@ -1,12 +1,4 @@
-import {
-  Body,
-  Delete,
-  Param,
-  ParseUUIDPipe,
-  Post,
-  Put,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/auth/auth.decorator';
