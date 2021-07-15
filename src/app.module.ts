@@ -10,11 +10,12 @@ import { HashtagsModule } from './hashtags/hashtags.module';
 import { AuthModule } from './auth/auth.module';
 import { PasswordEntity } from './auth/passwords.entity';
 import { SessionsEntity } from './auth/sessions.entity';
-const dotenv = require("dotenv");
+import { ConfigModule } from '@nestjs/config';
 
-dotenv.config()
+ 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       host: process.env.DB_HOST,
       type: 'postgres',
