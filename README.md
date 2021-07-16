@@ -6,7 +6,7 @@ Backend API for Moo using Nest framework (NodeJS + TypeScript + PostgreSQL)
 ## Prerequisites
 ```
 1. Node
-2. Docker
+2. Docker (Optional)
 ```
 
 ## Installation
@@ -27,7 +27,7 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 
-# docker mode
+# docker mode (Deploy with POSTGRES Instance) - Optional Step 
 $ docker-compose up &
 ```
 
