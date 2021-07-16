@@ -5,7 +5,7 @@ import {
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import compression from 'fastify-compress'; 
+import compression from 'fastify-compress';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
