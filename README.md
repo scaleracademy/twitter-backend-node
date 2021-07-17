@@ -63,6 +63,10 @@ grant all privileges on database moodb to mooadmin;
 
 - `posts` 
   - [ ] `GET /posts`  📃
+    - [ ] filter by author
+    - [ ] filter by replyTo
+    - [ ] filter by origPosts
+    - [ ] full-text-search on post content
   - [ ] `GET /posts/{postid}`
   - [ ] `POST /posts` 🔒
     - [x] simple posts
