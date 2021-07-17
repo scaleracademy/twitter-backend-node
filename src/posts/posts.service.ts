@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserEntity } from 'src/users/users.entity';
 import { PostEntity } from './posts.entity';
 import { PostsRepository } from './posts.repository';
@@ -17,7 +21,13 @@ export class PostsService {
     return this.postsRepository.find({
       take: 100,
       order: { createdAt: 'DESC' },
-      relations: ['author'],
+      relations: [
+        'author',
+        'origPost',
+        'origPost.author',
+        'replyTo',
+        'replyTo.author',
+      ],
     });
   }
 
@@ -42,14 +52,39 @@ export class PostsService {
   async createPost(
     post: Partial<PostEntity>,
     author: UserEntity,
+    originalPostId: string,
+    replyToPostId: string,
   ): Promise<PostEntity> {
-    // TODO: implement repost logic (orig_post_id)
-    // TODO: implement reply_to logic (reply_to_id)
     // TODO: detect #hashtags in the post and create hashtag entities for them
     // TODO: deletect @user mentions in the post
+    if (!post.text && !originalPostId) {
+      throw new BadRequestException('Post must contain text or be a repost');
+    }
+
+    if (originalPostId && replyToPostId) {
+      throw new BadRequestException('Post can either be a reply or a repost');
+    }
+
     const newPost = new PostEntity();
     newPost.text = post.text;
     newPost.author = author;
+
+    if (originalPostId) {
+      const origPost = await this.postsRepository.findOne(originalPostId);
+      if (!origPost) {
+        throw new NotFoundException('Original post not found');
+      }
+      newPost.origPost = origPost;
+    }
+
+    if (replyToPostId) {
+      const replyTo = await this.postsRepository.findOne(replyToPostId);
+      if (!replyTo) {
+        throw new NotFoundException('Original post not found');
+      }
+      newPost.replyTo = replyTo;
+    }
+
     const savedPost = await this.postsRepository.save(newPost);
     return savedPost;
   }
