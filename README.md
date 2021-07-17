@@ -64,7 +64,12 @@ grant all privileges on database moodb to mooadmin;
 - `posts` 
   - [ ] `GET /posts`  📃
   - [ ] `GET /posts/{postid}`
-  - [ ] `POST /posts` 🔒 
+  - [ ] `POST /posts` 🔒
+    - [x] simple posts
+    - [x] reply to a post 
+    - [x] repost / quote post
+    - [ ] \#hashtags
+    - [ ] \@mentions
   - [ ] `DELETE /posts/{postid}` 🔒
   - [ ] `PUT /posts/{postid}/like` 🔒
   - [ ] `DELETE /posts/{postid}/like` 🔒
