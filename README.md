@@ -45,6 +45,33 @@ create user mooadmin with password 'moopass';
 grant all privileges on database moodb to mooadmin;
 ```
 
+## Progress
+
+- `auth` 
+  - [x]  `POST /auth/login` 
+
+- `users` 
+  - [x]  `GET /users/@{username}`  
+  - [x]  `GET /users/{userid}` 
+  - [x]  `POST /users` 
+  - [x]  `PATCH /users/{userid}` 🔒
+  - [ ] `PUT /users/{userid}/follow` 🔒 
+  - [ ] `DELETE /users/{userid}/follow` 🔒 
+  - [ ] `GET /users/{userid}/followers` 📃
+  - [ ] `GET /users/{userid}/followees` 📃
+
+- `posts` 
+  - [ ] `GET /posts`  📃
+  - [ ] `GET /posts/{postid}`
+  - [ ] `POST /posts` 🔒 
+  - [ ] `DELETE /posts/{postid}` 🔒
+  - [ ] `PUT /posts/{postid}/like` 🔒
+  - [ ] `DELETE /posts/{postid}/like` 🔒
+
+- `hashtags` 
+  - [ ] `GET /hashtags`  📃 
+  - [ ] `GET /hashtags/{tag}/posts`  📃 
+
 
 ## License
 
