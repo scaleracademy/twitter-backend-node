@@ -8,6 +8,7 @@ import {
 import { Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiParam,
   ApiProperty,
   ApiPropertyOptional,
   ApiTags,
@@ -86,28 +87,42 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(RequiredAuthGuard)
   @Put('/:userid/follow')
-  followUser(): string {
-    return 'you followed user';
+  async followUser(
+    @User() follower: UserEntity,
+    @Param('userid') followeeId: string,
+  ): Promise<UserEntity> {
+    const followedUser = await this.userService.createUserFollowRelation(
+      follower,
+      followeeId,
+    );
+    return followedUser;
   }
 
   @ApiBearerAuth()
   @UseGuards(RequiredAuthGuard)
   @Delete('/:userid/follow')
-  unfollowUser(): string {
-    return 'you unfollowed user';
+  async unfollowUser(
+    @User() follower: UserEntity,
+    @Param('userid') followeeId: string,
+  ): Promise<UserEntity> {
+    const unfollowedUser = await this.userService.deleteUserFollowRelation(
+      follower,
+      followeeId,
+    );
+    return unfollowedUser;
   }
 
   @ApiBearerAuth()
   @UseGuards(RequiredAuthGuard)
   @Get('/:userid/followers')
-  getFollowersOfUser(): string {
-    return 'get followers of user';
+  async getFollowersOfUser(): Promise<UserEntity[]> {
+    return [];
   }
 
   @ApiBearerAuth()
   @UseGuards(RequiredAuthGuard)
   @Put('/:userid/followees')
-  getFolloweesOfUser(): string {
-    return `get followees of given user`;
+  async getFolloweesOfUser(): Promise<UserEntity[]> {
+    return [];
   }
 }

@@ -3,6 +3,7 @@ import { AuthService } from 'src/auth/auth.service';
 import {
   MockPasswordRepositoryProvider,
   MockSessionRepositoryProvider,
+  MockUserFollowingsRepositoryProvider,
   MockUsersRepositoryProvider,
 } from 'src/commons/mocks/mock.providers';
 import { UsersService } from './users.service';
@@ -16,6 +17,7 @@ describe('UsersService', () => {
         UsersService,
         AuthService,
         MockUsersRepositoryProvider,
+        MockUserFollowingsRepositoryProvider,
         MockPasswordRepositoryProvider,
         MockSessionRepositoryProvider,
       ],

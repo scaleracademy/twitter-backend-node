@@ -51,12 +51,13 @@ grant all privileges on database moodb to mooadmin;
   - [x]  `POST /auth/login` 
 
 - `users` 
-  - [x]  `GET /users/@{username}`  
-  - [x]  `GET /users/{userid}` 
-  - [x]  `POST /users` 
-  - [x]  `PATCH /users/{userid}` 🔒
-  - [ ] `PUT /users/{userid}/follow` 🔒 
-  - [ ] `DELETE /users/{userid}/follow` 🔒 
+  - [ ] `GET /users` 📃
+  - [x] `GET /users/@{username}`  
+  - [x] `GET /users/{userid}` 
+  - [x] `POST /users` 
+  - [x] `PATCH /users/{userid}` 🔒
+  - [x] `PUT /users/{userid}/follow` 🔒 
+  - [x] `DELETE /users/{userid}/follow` 🔒 
   - [ ] `GET /users/{userid}/followers` 📃
   - [ ] `GET /users/{userid}/followees` 📃
 

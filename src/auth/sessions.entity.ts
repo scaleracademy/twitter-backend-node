@@ -1,6 +1,6 @@
 import { MooBaseEntity } from 'src/commons/base.entity';
 import { UserEntity } from 'src/users/users.entity';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('sessions')
 export class SessionsEntity extends MooBaseEntity {
@@ -8,6 +8,6 @@ export class SessionsEntity extends MooBaseEntity {
   userId: string;
 
   @JoinColumn({ name: 'userId' })
-  @OneToOne(() => UserEntity, { lazy: true })
+  @ManyToOne(() => UserEntity, { lazy: true })
   user: Promise<UserEntity>;
 }
