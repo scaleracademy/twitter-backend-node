@@ -1,4 +1,12 @@
-import { Body, Delete, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Delete,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { Controller, Get } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -18,14 +26,21 @@ class PostCreateRequestBody {
   @ApiPropertyOptional() replyToPostId: string;
 }
 
+class PostDetailsQueryParams {
+  @ApiPropertyOptional() authorId: string;
+  @ApiPropertyOptional() hashtags: string[];
+}
+
 @ApiTags('posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get('/')
-  async getAllPosts(): Promise<PostEntity[]> {
-    return await this.postsService.getAllPosts();
+  async getAllPosts(
+    @Query() query: PostDetailsQueryParams,
+  ): Promise<PostEntity[]> {
+    return await this.postsService.getAllPosts(query.authorId);
   }
 
   @Get('/:postId')

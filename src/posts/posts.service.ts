@@ -14,21 +14,39 @@ export class PostsService {
   /**
    * @description find all posts
    */
-  async getAllPosts(): Promise<Array<PostEntity>> {
+  async getAllPosts(
+    authorId?: string,
+    hashtags?: string[] | null,
+  ): Promise<Array<PostEntity>> {
     // TODO: implementation pagination (size + limit)
-    // TODO: implement filter by author
     // TODO: implement filter by hashtag
-    return this.postsRepository.find({
-      take: 100,
-      order: { createdAt: 'DESC' },
-      relations: [
-        'author',
-        'origPost',
-        'origPost.author',
-        'replyTo',
-        'replyTo.author',
-      ],
-    });
+    const queryBuilder = this.postsRepository.createQueryBuilder('posts');
+
+    if (authorId) {
+      queryBuilder
+        .leftJoinAndSelect('posts.author', 'author')
+        .where(`posts.author = :authorId`, { authorId })
+        .addSelect('posts.created_at')
+        .orderBy('posts.created_at', 'DESC');
+    }
+
+    if (hashtags && hashtags.length > 0) {
+      // TODO
+    }
+
+    return authorId
+      ? queryBuilder.getMany()
+      : this.postsRepository.find({
+          take: 100,
+          order: { createdAt: 'DESC' },
+          relations: [
+            'author',
+            'origPost',
+            'origPost.author',
+            'replyTo',
+            'replyTo.author',
+          ],
+        });
   }
 
   /**
