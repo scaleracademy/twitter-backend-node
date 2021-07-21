@@ -28,10 +28,9 @@ export class PostsController {
     return await this.postsService.getAllPosts();
   }
 
-  @Get('/:postid')
-  getPostDetails(@Param('postid') postid: string): string {
-    // TODO
-    return `details of postid = ${postid}`;
+  @Get('/:postId')
+  async getPostDetails(@Param('postId') postId: string): Promise<PostEntity> {
+    return await this.postsService.getPost(postId);
   }
 
   @ApiBearerAuth()
