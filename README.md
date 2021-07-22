@@ -42,6 +42,7 @@ $ npm run test:cov
 ```psql 
 create database moodb;
 create user mooadmin with password 'moopass';
+alter user mooadmin with Superuser;
 grant all privileges on database moodb to mooadmin;
 ```
 
