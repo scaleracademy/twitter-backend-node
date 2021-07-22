@@ -53,7 +53,15 @@ export class PostsService {
    * @description find post by id
    */
   async getPost(id: string): Promise<PostEntity> {
-    return this.postsRepository.findOne(id);
+    return this.postsRepository.findOne(id, {
+      relations: [
+        'author',
+        'origPost',
+        'origPost.author',
+        'replyTo',
+        'replyTo.author',
+      ],
+    });
   }
 
   /**
