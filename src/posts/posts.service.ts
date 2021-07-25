@@ -26,8 +26,7 @@ export class PostsService {
       queryBuilder
         .leftJoinAndSelect('posts.author', 'author')
         .where(`posts.author = :authorId`, { authorId })
-        .addSelect('posts.created_at')
-        .orderBy('posts.created_at', 'DESC');
+        .addSelect('posts.created_at');
     }
 
     if (hashtags && hashtags.length > 0) {
@@ -35,7 +34,7 @@ export class PostsService {
     }
 
     return authorId
-      ? queryBuilder.getMany()
+      ? queryBuilder.orderBy('posts.created_at', 'DESC').limit(100).getMany()
       : this.postsRepository.find({
           take: 100,
           order: { createdAt: 'DESC' },
