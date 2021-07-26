@@ -20,32 +20,29 @@ export class PostsService {
   ): Promise<Array<PostEntity>> {
     // TODO: implementation pagination (size + limit)
     // TODO: implement filter by hashtag
-    const queryBuilder = this.postsRepository.createQueryBuilder('posts');
+    const queryBuilder = this.postsRepository
+      .createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.author', 'author')
+      .leftJoinAndSelect('posts.origPost', 'origPost')
+      .addSelect('origPost.author')
+      .leftJoinAndSelect('origPost.author', 'origPostAuthor')
+      .leftJoinAndSelect('posts.replyTo', 'replyTo')
+      .addSelect('replyTo.author')
+      .leftJoinAndSelect('replyTo.author', 'replyToAuthor');
 
     if (authorId) {
-      queryBuilder
-        .leftJoinAndSelect('posts.author', 'author')
-        .where(`posts.author = :authorId`, { authorId })
-        .addSelect('posts.created_at');
+      queryBuilder.where(`posts.author = :authorId`, { authorId });
     }
 
     if (hashtags && hashtags.length > 0) {
       // TODO
     }
 
-    return authorId
-      ? queryBuilder.orderBy('posts.created_at', 'DESC').limit(100).getMany()
-      : this.postsRepository.find({
-          take: 100,
-          order: { createdAt: 'DESC' },
-          relations: [
-            'author',
-            'origPost',
-            'origPost.author',
-            'replyTo',
-            'replyTo.author',
-          ],
-        });
+    return queryBuilder
+      .addSelect('posts.created_at')
+      .orderBy('posts.created_at', 'DESC')
+      .limit(100)
+      .getMany();
   }
 
   /**
