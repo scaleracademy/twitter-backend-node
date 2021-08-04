@@ -14,13 +14,42 @@ export class PostsService {
   /**
    * @description find all posts
    */
-  async getAllPosts(): Promise<Array<PostEntity>> {
+  async getAllPosts(
+    authorId?: string,
+    hashtags?: string[] | null,
+  ): Promise<Array<PostEntity>> {
     // TODO: implementation pagination (size + limit)
-    // TODO: implement filter by author
     // TODO: implement filter by hashtag
-    return this.postsRepository.find({
-      take: 100,
-      order: { createdAt: 'DESC' },
+    const queryBuilder = this.postsRepository
+      .createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.author', 'author')
+      .leftJoinAndSelect('posts.origPost', 'origPost')
+      .addSelect('origPost.author')
+      .leftJoinAndSelect('origPost.author', 'origPostAuthor')
+      .leftJoinAndSelect('posts.replyTo', 'replyTo')
+      .addSelect('replyTo.author')
+      .leftJoinAndSelect('replyTo.author', 'replyToAuthor');
+
+    if (authorId) {
+      queryBuilder.where(`posts.author = :authorId`, { authorId });
+    }
+
+    if (hashtags && hashtags.length > 0) {
+      // TODO
+    }
+
+    return queryBuilder
+      .addSelect('posts.created_at')
+      .orderBy('posts.created_at', 'DESC')
+      .limit(100)
+      .getMany();
+  }
+
+  /**
+   * @description find post by id
+   */
+  async getPost(id: string): Promise<PostEntity> {
+    return this.postsRepository.findOne(id, {
       relations: [
         'author',
         'origPost',
@@ -29,13 +58,6 @@ export class PostsService {
         'replyTo.author',
       ],
     });
-  }
-
-  /**
-   * @description find post by id
-   */
-  async getPost(id: string): Promise<PostEntity> {
-    return this.postsRepository.findOne(id);
   }
 
   /**
