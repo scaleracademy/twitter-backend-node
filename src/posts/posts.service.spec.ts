@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MockPostsRepositoryProvider } from 'src/commons/mocks/mock.providers';
+import { MockPostsModule } from './posts.module.mock';
 import { PostsService } from './posts.service';
 
 describe('PostsService', () => {
@@ -7,7 +7,8 @@ describe('PostsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PostsService, MockPostsRepositoryProvider],
+      imports: [MockPostsModule],
+      providers: [PostsService],
     }).compile();
 
     service = module.get<PostsService>(PostsService);
