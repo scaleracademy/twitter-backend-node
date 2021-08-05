@@ -51,7 +51,7 @@ $ npm run start:dev
 $ npm run start:prod
 
 # docker mode (Deploy with POSTGRES Instance) - Optional Step 
-$ docker-compose up &
+$ docker-compose --env-file .env.production up &
 ```
 
 ## Test
