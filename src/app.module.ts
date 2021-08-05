@@ -15,7 +15,9 @@ import { ConfigModule } from '@nestjs/config';
  
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env.dev',
+    }),
     TypeOrmModule.forRoot({
       host: process.env.DB_HOST,
       type: 'postgres',
