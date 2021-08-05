@@ -11,6 +11,21 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: moodb_test        
+          POSTGRES_PASSWORD: moopass
+          POSTGRES_USER: mooadmin
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     strategy:
       matrix:
         node-version: [14.x, 16.x]
@@ -43,5 +58,8 @@ jobs:
     - name: Build Application
       run: npm run build
     
-    - name: Run Tests 
+    - name: Run Unit Tests 
       run: npm run test
+
+    - name: Run E2E Tests 
+      run: npm run test:e2e

@@ -2,8 +2,12 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
+import { Repository } from 'typeorm';
+import { UserFollowingEntity } from './user-followings.entity';
 import { UserEntity } from './users.entity';
 import { UsersRepository } from './users.repository';
 
@@ -12,6 +16,8 @@ export class UsersService {
   constructor(
     private userRepo: UsersRepository,
     private authService: AuthService,
+    @InjectRepository(UserFollowingEntity)
+    private userFollowRepo: Repository<UserFollowingEntity>,
   ) {}
   /**
    * @description find a user with a given username
@@ -78,5 +84,46 @@ export class UsersService {
     if (newUserDetails.name) existingUser.name = newUserDetails.name;
 
     return await this.userRepo.save(existingUser);
+  }
+
+  /**
+   * create a user-user follow pairing
+   */
+  public async createUserFollowRelation(
+    follower: UserEntity,
+    followeeId: string,
+  ) {
+    const followee = await this.getUserByUserId(followeeId);
+    if (!followee) {
+      throw new NotFoundException('User not found');
+    }
+    const newFollow = await this.userFollowRepo.save({
+      follower,
+      followee,
+    });
+    return newFollow.followee;
+  }
+
+  /**
+   * delete a user-user follow pairing
+   */
+  public async deleteUserFollowRelation(
+    follower: UserEntity,
+    followeeId: string,
+  ) {
+    const followee = await this.getUserByUserId(followeeId);
+    if (!followee) {
+      throw new NotFoundException('User not found');
+    }
+    const follow = await this.userFollowRepo.findOne({
+      where: { follower, followee },
+    });
+    if (follow) {
+      await this.userFollowRepo.delete(follow.id);
+      // TODO: future: show show that I do not follow them anymore in the response
+      return followee;
+    } else {
+      throw new NotFoundException('No follow relationship found');
+    }
   }
 }
