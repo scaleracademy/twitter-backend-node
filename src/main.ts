@@ -31,6 +31,6 @@ async function bootstrap() {
     encodings: ['gzip'],
   });
 
-  await app.listen(process.env.PORT, '0.0.0.0');
+  await app.listen(process.env.PORT, process.env.ADDRESS);
 }
 bootstrap();

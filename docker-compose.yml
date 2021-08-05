@@ -8,6 +8,9 @@ services:
       - "postgres:postgres"
     depends_on:
       - "postgres"
+    environment:
+      WAIT_HOSTS: postgres:5432
+      NODE_ENV: production
   postgres:
     image: "postgres:9.6"
     volumes:

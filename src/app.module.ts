@@ -11,11 +11,15 @@ import { AuthModule } from './auth/auth.module';
 import { PasswordEntity } from './auth/passwords.entity';
 import { SessionsEntity } from './auth/sessions.entity';
 import { ConfigModule } from '@nestjs/config';
+import { ProdDbModule } from './commons/db.module';
+import { ApiModule } from './api.module';
 
  
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env.dev',
+    }),
     TypeOrmModule.forRoot({
       host: process.env.DB_HOST,
       type: 'postgres',
@@ -31,6 +35,7 @@ import { ConfigModule } from '@nestjs/config';
     PostsModule,
     HashtagsModule,
     AuthModule,
+    ApiModule, ProdDbModule
   ],
   controllers: [AppController],
   providers: [AppService],

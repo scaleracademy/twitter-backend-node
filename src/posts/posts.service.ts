@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserEntity } from 'src/users/users.entity';
 import { PostEntity } from './posts.entity';
 import { PostsRepository } from './posts.repository';
@@ -10,22 +14,50 @@ export class PostsService {
   /**
    * @description find all posts
    */
-  async getAllPosts(): Promise<Array<PostEntity>> {
+  async getAllPosts(
+    authorId?: string,
+    hashtags?: string[] | null,
+  ): Promise<Array<PostEntity>> {
     // TODO: implementation pagination (size + limit)
-    // TODO: implement filter by author
     // TODO: implement filter by hashtag
-    return this.postsRepository.find({
-      take: 100,
-      order: { createdAt: 'DESC' },
-      relations: ['author'],
-    });
+    const queryBuilder = this.postsRepository
+      .createQueryBuilder('posts')
+      .leftJoinAndSelect('posts.author', 'author')
+      .leftJoinAndSelect('posts.origPost', 'origPost')
+      .addSelect('origPost.author')
+      .leftJoinAndSelect('origPost.author', 'origPostAuthor')
+      .leftJoinAndSelect('posts.replyTo', 'replyTo')
+      .addSelect('replyTo.author')
+      .leftJoinAndSelect('replyTo.author', 'replyToAuthor');
+
+    if (authorId) {
+      queryBuilder.where(`posts.author = :authorId`, { authorId });
+    }
+
+    if (hashtags && hashtags.length > 0) {
+      // TODO
+    }
+
+    return queryBuilder
+      .addSelect('posts.created_at')
+      .orderBy('posts.created_at', 'DESC')
+      .limit(100)
+      .getMany();
   }
 
   /**
    * @description find post by id
    */
   async getPost(id: string): Promise<PostEntity> {
-    return this.postsRepository.findOne(id);
+    return this.postsRepository.findOne(id, {
+      relations: [
+        'author',
+        'origPost',
+        'origPost.author',
+        'replyTo',
+        'replyTo.author',
+      ],
+    });
   }
 
   /**
@@ -42,14 +74,39 @@ export class PostsService {
   async createPost(
     post: Partial<PostEntity>,
     author: UserEntity,
+    originalPostId: string,
+    replyToPostId: string,
   ): Promise<PostEntity> {
-    // TODO: implement repost logic (orig_post_id)
-    // TODO: implement reply_to logic (reply_to_id)
     // TODO: detect #hashtags in the post and create hashtag entities for them
     // TODO: deletect @user mentions in the post
+    if (!post.text && !originalPostId) {
+      throw new BadRequestException('Post must contain text or be a repost');
+    }
+
+    if (originalPostId && replyToPostId) {
+      throw new BadRequestException('Post can either be a reply or a repost');
+    }
+
     const newPost = new PostEntity();
     newPost.text = post.text;
     newPost.author = author;
+
+    if (originalPostId) {
+      const origPost = await this.postsRepository.findOne(originalPostId);
+      if (!origPost) {
+        throw new NotFoundException('Original post not found');
+      }
+      newPost.origPost = origPost;
+    }
+
+    if (replyToPostId) {
+      const replyTo = await this.postsRepository.findOne(replyToPostId);
+      if (!replyTo) {
+        throw new NotFoundException('Original post not found');
+      }
+      newPost.replyTo = replyTo;
+    }
+
     const savedPost = await this.postsRepository.save(newPost);
     return savedPost;
   }
