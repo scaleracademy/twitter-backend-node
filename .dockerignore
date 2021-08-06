@@ -2,7 +2,8 @@
 .git
 .gitignore
 node_modules
-.env*
+.env.dev
+.env.test
 .vscode
 npm-debug.log
 Dockerfile*
