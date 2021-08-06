@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^7.6.15",
+    "@nestjs/config": "^1.0.0",
     "@nestjs/core": "^7.6.15",
     "@nestjs/platform-fastify": "^7.6.18",
     "@nestjs/swagger": "^4.8.1",
