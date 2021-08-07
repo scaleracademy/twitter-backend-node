@@ -99,7 +99,7 @@ grant all privileges on database moodb to mooadmin;
     - [x] repost / quote post
     - [ ] \#hashtags
     - [ ] \@mentions
-  - [ ] `DELETE /posts/{postid}` 🔒
+  - [x] `DELETE /posts/{postid}` 🔒
   - [ ] `PUT /posts/{postid}/like` 🔒
   - [ ] `DELETE /posts/{postid}/like` 🔒
 
