@@ -100,7 +100,7 @@ grant all privileges on database moodb to mooadmin;
     - [ ] \#hashtags
     - [ ] \@mentions
   - [ ] `DELETE /posts/{postid}` 🔒
-  - [ ] `PUT /posts/{postid}/like` 🔒
+  - [x] `PUT /posts/{postid}/like` 🔒
   - [ ] `DELETE /posts/{postid}/like` 🔒
 
 - `hashtags`

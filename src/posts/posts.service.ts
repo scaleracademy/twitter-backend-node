@@ -3,13 +3,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
+import { LikesService } from 'src/likes/likes.service';
 import { UserEntity } from 'src/users/users.entity';
 import { PostEntity } from './posts.entity';
 import { PostsRepository } from './posts.repository';
 
 @Injectable()
 export class PostsService {
-  constructor(private postsRepository: PostsRepository) {}
+  constructor(
+    private postsRepository: PostsRepository,
+    private readonly likesService: LikesService,
+    private readonly authService: AuthService,
+  ) {}
 
   /**
    * @description find all posts
@@ -109,5 +115,19 @@ export class PostsService {
 
     const savedPost = await this.postsRepository.save(newPost);
     return savedPost;
+  }
+
+  /**
+   * @description like post by id
+   */
+  async likePost(token: string, postId: string): Promise<boolean> {
+    const user = await this.authService.getUserFromSessionToken(token);
+
+    const post = await this.getPost(postId);
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    return await this.likesService.likePost(post, user);
   }
 }
