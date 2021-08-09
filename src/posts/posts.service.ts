@@ -130,4 +130,18 @@ export class PostsService {
 
     return await this.likesService.likePost(post, user);
   }
+
+  /**
+   * @description unlike post by id
+   */
+  async unlikePost(token: string, postId: string): Promise<boolean> {
+    const user = await this.authService.getUserFromSessionToken(token);
+
+    const post = await this.getPost(postId);
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    return await this.likesService.unlikePost(postId, user.id);
+  }
 }

@@ -89,7 +89,13 @@ export class PostsController {
   @ApiBearerAuth()
   @UseGuards(RequiredAuthGuard)
   @Delete('/:postid/like')
-  async unlikePost(@Param('postid') postid: string): Promise<string> {
-    return `unliked post ${postid}`;
+  async unlikePost(@Param('postid') postid: string, @Req() req) {
+    const token = (req.headers.authorization as string).replace('Bearer ', '');
+    const unlikedPost = {
+      postId: postid,
+      unliked: await this.postsService.unlikePost(token, postid),
+    };
+
+    return unlikedPost;
   }
 }

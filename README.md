@@ -101,7 +101,7 @@ grant all privileges on database moodb to mooadmin;
     - [ ] \@mentions
   - [ ] `DELETE /posts/{postid}` 🔒
   - [x] `PUT /posts/{postid}/like` 🔒
-  - [ ] `DELETE /posts/{postid}/like` 🔒
+  - [x] `DELETE /posts/{postid}/like` 🔒
 
 - `hashtags`
   - [ ] `GET /hashtags` 📃
