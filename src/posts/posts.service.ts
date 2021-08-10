@@ -121,20 +121,24 @@ export class PostsService {
    * @description like post by id
    */
   async likePost(token: string, postId: string): Promise<boolean> {
-    const user = await this.authService.getUserFromSessionToken(token);
-
-    const post = await this.getPost(postId);
-    if (!post) {
-      throw new NotFoundException('Post not found');
-    }
-
-    return await this.likesService.likePost(post, user);
+    return await this.likeUnlikePostHelper(token, postId, 'like');
   }
 
   /**
    * @description unlike post by id
    */
   async unlikePost(token: string, postId: string): Promise<boolean> {
+    return await this.likeUnlikePostHelper(token, postId, 'unlike');
+  }
+
+  /**
+   * @description helper method for like/unlike post by id
+   */
+  private async likeUnlikePostHelper(
+    token: string,
+    postId: string,
+    type: 'like' | 'unlike',
+  ) {
     const user = await this.authService.getUserFromSessionToken(token);
 
     const post = await this.getPost(postId);
@@ -142,6 +146,8 @@ export class PostsService {
       throw new NotFoundException('Post not found');
     }
 
-    return await this.likesService.unlikePost(postId, user.id);
+    return type === 'like'
+      ? await this.likesService.likePost(post, user)
+      : await this.likesService.unlikePost(postId, user.id);
   }
 }

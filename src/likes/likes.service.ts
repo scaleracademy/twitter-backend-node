@@ -12,22 +12,7 @@ export class LikesService {
    * @description like a post
    */
   async likePost(post: PostEntity, user: UserEntity): Promise<boolean> {
-    if (!post || !user) {
-      throw new BadRequestException(
-        'Post can only be liked if both user id and post id is provided',
-      );
-    }
-
-    const postId = post.id;
-    const userId = user.id;
-
-    const alreadyLiked = await this.likesRepository
-      .createQueryBuilder('likes')
-      .leftJoinAndSelect('likes.post', 'post')
-      .leftJoinAndSelect('likes.user', 'user')
-      .where(`post.id = :postId`, { postId })
-      .where(`user.id = :userId`, { userId })
-      .getOne();
+    const alreadyLiked = await this.getLikedPost(post.id, user.id);
 
     if (alreadyLiked) {
       return false;
@@ -38,26 +23,14 @@ export class LikesService {
     newLike.user = user;
 
     const savedLike = await this.likesRepository.save(newLike);
-    return savedLike != null;
+    return savedLike !== null;
   }
 
   /**
    * @description unlike a post
    */
   async unlikePost(postId: string, userId: string): Promise<boolean> {
-    if (!postId || !userId) {
-      throw new BadRequestException(
-        'Post can only be unliked if both user id and post id is provided',
-      );
-    }
-
-    const likedPost = await this.likesRepository
-      .createQueryBuilder('likes')
-      .leftJoinAndSelect('likes.post', 'post')
-      .leftJoinAndSelect('likes.user', 'user')
-      .where(`post.id = :postId`, { postId })
-      .where(`user.id = :userId`, { userId })
-      .getOne();
+    const likedPost = await this.getLikedPost(postId, userId);
 
     if (!likedPost) {
       return false;
@@ -65,5 +38,27 @@ export class LikesService {
 
     const unlikePost = await this.likesRepository.delete(likedPost.id);
     return unlikePost.affected === 1;
+  }
+
+  /**
+   * @description helper method to get a liked post
+   */
+  private async getLikedPost(
+    postId: string,
+    userId: string,
+  ): Promise<LikesEntity> {
+    if (!postId || !userId) {
+      throw new BadRequestException(
+        'Post can only be liked/unliked if both user id and post id is provided',
+      );
+    }
+
+    return await this.likesRepository
+      .createQueryBuilder('likes')
+      .leftJoinAndSelect('likes.post', 'post')
+      .leftJoinAndSelect('likes.user', 'user')
+      .where(`post.id = :postId`, { postId })
+      .where(`user.id = :userId`, { userId })
+      .getOne();
   }
 }
