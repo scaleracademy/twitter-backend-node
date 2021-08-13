@@ -6,23 +6,29 @@ import {
   MockPostsRepositoryProvider,
   MockPasswordRepositoryProvider,
   MockSessionRepositoryProvider,
+  MockLikesRepositoryProvider,
 } from 'src/commons/mocks/mock.providers';
+import { LikesService } from 'src/likes/likes.service';
 
 @Module({
   providers: [
     MockUsersRepositoryProvider,
     MockPostsRepositoryProvider,
+    MockLikesRepositoryProvider,
     MockPasswordRepositoryProvider,
     MockSessionRepositoryProvider,
     RequiredAuthGuard,
+    LikesService,
     AuthService,
   ],
   exports: [
     MockUsersRepositoryProvider,
     MockPostsRepositoryProvider,
+    MockLikesRepositoryProvider,
     MockPasswordRepositoryProvider,
     MockSessionRepositoryProvider,
     RequiredAuthGuard,
+    LikesService,
     AuthService,
   ],
 })
