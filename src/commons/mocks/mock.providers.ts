@@ -17,7 +17,6 @@ export const MockUserFollowingsRepositoryProvider = {
   useValue: {},
 };
 
-
 export const MockPostsRepositoryProvider = {
   provide: getCustomRepositoryToken(PostsRepository),
   useClass: MockPostsRepository,
