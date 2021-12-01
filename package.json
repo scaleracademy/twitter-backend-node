@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "doc:app": "npx @compodoc/compodoc -p tsconfig.json -d ./docs/app",
+    "doc": "npx @compodoc/compodoc -p tsconfig.json -d ./docs",
     "prebuild": "rimraf dist",
     "postinstall": "node build/postInstall.js",
     "build": "nest build",
