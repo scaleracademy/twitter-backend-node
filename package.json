@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "doc:app": "npx @compodoc/compodoc -p tsconfig.json -d ./docs/app",
     "prebuild": "rimraf dist",
     "postinstall": "node build/postInstall.js",
     "build": "nest build",
@@ -39,6 +40,7 @@
     "typeorm": "^0.2.34"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.16",
     "@nestjs/cli": "^8.1.5",
     "@nestjs/schematics": "^8.0.5",
     "@nestjs/testing": "^8.2.3",
