@@ -4,6 +4,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+/**
+ * Base entity which is extended by all entities in our application.
+ */
 export abstract class MooBaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

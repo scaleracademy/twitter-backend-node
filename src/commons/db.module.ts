@@ -6,6 +6,9 @@ import { PostEntity } from 'src/posts/posts.entity';
 import { UserFollowingEntity } from 'src/users/user-followings.entity';
 import { UserEntity } from 'src/users/users.entity';
 
+/**
+ * Database module for production
+ */
 @Global()
 @Module({
   imports: [
@@ -29,6 +32,9 @@ import { UserEntity } from 'src/users/users.entity';
 })
 export class ProdDbModule {}
 
+/**
+ * Database module for testing purposes
+ */
 @Global()
 @Module({
   imports: [
