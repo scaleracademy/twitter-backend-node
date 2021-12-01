@@ -1,15 +1,15 @@
-import { getCustomRepositoryToken, getRepositoryToken } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { PasswordEntity } from 'src/auth/passwords.entity';
 import { SessionsEntity } from 'src/auth/sessions.entity';
-import { PostsRepository } from 'src/posts/posts.repository';
+import { PostEntity } from 'src/posts/posts.entity';
 import { UserFollowingEntity } from 'src/users/user-followings.entity';
-import { UsersRepository } from 'src/users/users.repository';
+import { UserEntity } from 'src/users/users.entity';
 import { MockPostsRepository } from './posts.repository.mock';
 import { MockUsersRepository } from './users.repository.mock';
 
 export const MockUsersRepositoryProvider = {
-  provide: getCustomRepositoryToken(UsersRepository),
-  useClass: MockUsersRepository,
+  provide: getRepositoryToken(UserEntity),
+  useValue: new MockUsersRepository(),
 };
 
 export const MockUserFollowingsRepositoryProvider = {
@@ -18,8 +18,8 @@ export const MockUserFollowingsRepositoryProvider = {
 };
 
 export const MockPostsRepositoryProvider = {
-  provide: getCustomRepositoryToken(PostsRepository),
-  useClass: MockPostsRepository,
+  provide: getRepositoryToken(PostEntity),
+  useValue: new MockPostsRepository(),
 };
 
 export const MockPasswordRepositoryProvider = {

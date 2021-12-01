@@ -3,13 +3,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/users.entity';
 import { PostEntity } from './posts.entity';
 import { PostsRepository } from './posts.repository';
 
 @Injectable()
 export class PostsService {
-  constructor(private postsRepository: PostsRepository) {}
+  constructor(
+    @InjectRepository(PostEntity)
+    private postsRepository: PostsRepository,
+  ) {}
 
   /**
    * @description find all posts
