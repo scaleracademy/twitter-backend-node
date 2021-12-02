@@ -1,10 +1,11 @@
 version = 1
 
-[[analyzers]]
-name = "javascript"
-enabled = true
 
 exclude_patterns = [
   "dist/**",
   "docs/**"
 ]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
