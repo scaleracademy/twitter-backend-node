@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { LikesService } from 'src/likes/likes.service';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/users.entity';
 import { PostEntity } from './posts.entity';
 import { PostsRepository } from './posts.repository';
@@ -12,9 +13,10 @@ import { PostsRepository } from './posts.repository';
 @Injectable()
 export class PostsService {
   constructor(
-    private postsRepository: PostsRepository,
     private readonly likesService: LikesService,
     private readonly authService: AuthService,
+    @InjectRepository(PostEntity)
+    private postsRepository: PostsRepository,
   ) {}
 
   /**

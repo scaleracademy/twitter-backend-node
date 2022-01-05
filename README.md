@@ -3,6 +3,8 @@
 Backend API for Moo using Nest framework (NodeJS + TypeScript + PostgreSQL)
 
 ![NodeJS Workflow](https://github.com/scaleracademy/twitter-backend-node/actions/workflows/nodejs.yml/badge.svg)
+[![DeepSource](https://deepsource.io/gh/scaleracademy/twitter-backend-node.svg/?label=active+issues&show_trend=true&token=ZAK6LYPxCowffXKqHhnZHsMI)](https://deepsource.io/gh/scaleracademy/twitter-backend-node/?ref=repository-badge)
+[![codecov](https://codecov.io/gh/scaleracademy/twitter-backend-node/branch/main/graph/badge.svg?token=WrC1l2AeDE)](https://codecov.io/gh/scaleracademy/twitter-backend-node)
 
 ## About
 
