@@ -5,6 +5,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Controller, Get } from '@nestjs/common';
@@ -79,14 +80,26 @@ export class PostsController {
   @ApiBearerAuth()
   @UseGuards(RequiredAuthGuard)
   @Put('/:postid/like')
-  async likePost(@Param('postid') postid: string): Promise<string> {
-    return `liked post ${postid}`;
+  async likePost(@Param('postid') postid: string, @Req() req) {
+    const token = (req.headers.authorization as string).replace('Bearer ', '');
+    const likedPost = {
+      postId: postid,
+      liked: await this.postsService.likePost(token, postid),
+    };
+
+    return likedPost;
   }
 
   @ApiBearerAuth()
   @UseGuards(RequiredAuthGuard)
   @Delete('/:postid/like')
-  async unlikePost(@Param('postid') postid: string): Promise<string> {
-    return `unliked post ${postid}`;
+  async unlikePost(@Param('postid') postid: string, @Req() req) {
+    const token = (req.headers.authorization as string).replace('Bearer ', '');
+    const unlikedPost = {
+      postId: postid,
+      unliked: await this.postsService.unlikePost(token, postid),
+    };
+
+    return unlikedPost;
   }
 }

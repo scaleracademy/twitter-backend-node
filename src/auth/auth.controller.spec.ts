@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MockPasswordRepositoryProvider, MockSessionRepositoryProvider, MockUsersRepositoryProvider } from 'src/commons/mocks/mock.providers';
+import {
+  MockPasswordRepositoryProvider,
+  MockSessionRepositoryProvider,
+  MockUsersRepositoryProvider,
+} from 'src/commons/mocks/mock.providers';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 

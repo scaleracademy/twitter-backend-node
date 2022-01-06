@@ -3,13 +3,21 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
+import { LikesService } from 'src/likes/likes.service';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/users.entity';
 import { PostEntity } from './posts.entity';
 import { PostsRepository } from './posts.repository';
 
 @Injectable()
 export class PostsService {
-  constructor(private postsRepository: PostsRepository) {}
+  constructor(
+    private readonly likesService: LikesService,
+    private readonly authService: AuthService,
+    @InjectRepository(PostEntity)
+    private postsRepository: PostsRepository,
+  ) {}
 
   /**
    * @description find all posts
@@ -109,5 +117,39 @@ export class PostsService {
 
     const savedPost = await this.postsRepository.save(newPost);
     return savedPost;
+  }
+
+  /**
+   * @description like post by id
+   */
+  async likePost(token: string, postId: string): Promise<boolean> {
+    return await this.likeUnlikePostHelper(token, postId, 'like');
+  }
+
+  /**
+   * @description unlike post by id
+   */
+  async unlikePost(token: string, postId: string): Promise<boolean> {
+    return await this.likeUnlikePostHelper(token, postId, 'unlike');
+  }
+
+  /**
+   * @description helper method for like/unlike post by id
+   */
+  private async likeUnlikePostHelper(
+    token: string,
+    postId: string,
+    type: 'like' | 'unlike',
+  ) {
+    const user = await this.authService.getUserFromSessionToken(token);
+
+    const post = await this.getPost(postId);
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    return type === 'like'
+      ? await this.likesService.likePost(post, user)
+      : await this.likesService.unlikePost(postId, user.id);
   }
 }

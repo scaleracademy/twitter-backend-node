@@ -1,6 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
 import { ApiModule } from 'src/api.module';
 import { TestDbModule } from 'src/commons/db.module';
 import {
@@ -20,6 +18,7 @@ describe('UsersController (e2e)', () => {
       new FastifyAdapter(),
     );
     await app.init();
+    await app.getHttpAdapter().getInstance().ready();
   });
 
   // test user creation

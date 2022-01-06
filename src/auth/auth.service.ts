@@ -14,6 +14,7 @@ import { SessionsEntity } from './sessions.entity';
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(UserEntity)
     private userRepo: UsersRepository,
     @InjectRepository(PasswordEntity)
     private passwordRepo: Repository<PasswordEntity>,

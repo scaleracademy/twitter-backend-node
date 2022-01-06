@@ -31,4 +31,10 @@ describe('UsersController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('should be return user', async () => {
+    const user = await controller.getUserByUserid('test-uuid');
+    expect(user).toBeDefined();
+    expect(user.id).toBe('test-uuid');
+  });
 });

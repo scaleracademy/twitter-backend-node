@@ -58,8 +58,26 @@ jobs:
     - name: Build Application
       run: npm run build
     
-    - name: Run Unit Tests 
-      run: npm run test
+    - name: Run Unit Tests (with Coverage)
+      run: npm run test:cov
 
-    - name: Run E2E Tests 
-      run: npm run test:e2e
+    - name: Upload unit test coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./coverage
+        fail_ci_if_error: true
+        flags: unittests
+        verbose: true
+
+    - name: Run E2E Tests (with Coverage)
+      run: npm run test:e2e:cov
+
+    - name: Upload E2E test coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./coverage-e2e
+        fail_ci_if_error: true
+        flags: e2etests
+        verbose: true

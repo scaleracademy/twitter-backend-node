@@ -3,16 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordEntity } from 'src/auth/passwords.entity';
 import { UserFollowingEntity } from './user-followings.entity';
 import { UsersController } from './users.controller';
-import { UsersRepository } from './users.repository';
+import { UserEntity } from './users.entity';
 import { UsersService } from './users.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      UsersRepository,
-      PasswordEntity,
-      UserFollowingEntity,
-    ]),
+    TypeOrmModule.forFeature([UserEntity, PasswordEntity, UserFollowingEntity]),
   ],
   controllers: [UsersController],
   providers: [UsersService],
