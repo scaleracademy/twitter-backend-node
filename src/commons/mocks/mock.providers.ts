@@ -1,6 +1,8 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { PasswordEntity } from 'src/auth/passwords.entity';
 import { SessionsEntity } from 'src/auth/sessions.entity';
+import { LikesEntity } from 'src/likes/likes.entity';
+import { MockLikesRepository } from './likes.repository.mock';
 import { PostEntity } from 'src/posts/posts.entity';
 import { UserFollowingEntity } from 'src/users/user-followings.entity';
 import { UserEntity } from 'src/users/users.entity';
@@ -20,6 +22,11 @@ export const MockUserFollowingsRepositoryProvider = {
 export const MockPostsRepositoryProvider = {
   provide: getRepositoryToken(PostEntity),
   useValue: new MockPostsRepository(),
+};
+
+export const MockLikesRepositoryProvider = {
+  provide: getRepositoryToken(LikesEntity),
+  useClass: MockLikesRepository,
 };
 
 export const MockPasswordRepositoryProvider = {
