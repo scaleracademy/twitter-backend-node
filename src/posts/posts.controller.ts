@@ -67,10 +67,14 @@ export class PostsController {
 
   @ApiBearerAuth()
   @UseGuards(RequiredAuthGuard)
-  @Delete('/:postid')
-  async deletePost(@Param('postid') postid: string): Promise<string> {
-    // TODO
-    return `delete postid = ${postid}`;
+  @Delete('/:postId')
+  async deletePost(@Param('postId') postId: string) {
+    const deletedPost = {
+      id: postId,
+      deleted: await this.postsService.deletePost(postId),
+    };
+
+    return deletedPost;
   }
 
   @ApiBearerAuth()
